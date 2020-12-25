@@ -44,15 +44,13 @@ public class Data {
 
     public static double[][] Demand() {// d_r^k
         double[][] demand
-                = {{800, 600}}
-                ;
+                ={ {800.00,600.00}};
         return demand;
 
     }
 
     public static double[][] Plant_Capacities() {// p_i^k
-        double[][] Plant_Capacities = {{1200, 1500},
-        {500, 800},};
+        double[][] Plant_Capacities = {{1200.00, 1500.00}};
         return Plant_Capacities;
 
     }
@@ -63,17 +61,17 @@ public class Data {
     }
 
     public static double[] Maximum_DCs_Capacities() {// q_j^+
-        double[] Maximum_DCs_Capacities = {1500, 1200};
+        double[] Maximum_DCs_Capacities = {1500.00, 1200.00};
         return Maximum_DCs_Capacities;
     }
 
     public static double[] DC_Fixed_Cost() {// f_j
-        double[] DC_Fixed_Cost = {960000 , 880000  };
+        double[] DC_Fixed_Cost = {960000.00,880000.00};
         return DC_Fixed_Cost;
     }
 
     public static double[] DC_Marginal_Cost() {// g_j
-        double[] DC_Marginal_Cost = {1, 2};
+        double[] DC_Marginal_Cost = {1.00, 2.00};
         return DC_Marginal_Cost;
     }
 

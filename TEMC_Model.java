@@ -8,6 +8,7 @@ import ilog.concert.IloNumVarType;
 import ilog.concert.IloObjective;
 import ilog.concert.IloObjectiveSense;
 import ilog.cplex.IloCplex;
+import static java.lang.Math.round;
 
 public class TEMC_Model {
 
@@ -15,7 +16,7 @@ public class TEMC_Model {
     protected int J;
     protected int R;
     protected int K;
-   
+
     protected int p;
     protected double[][][][] c;
     protected double[][] d;
@@ -35,7 +36,7 @@ public class TEMC_Model {
         this.J = J;
         this.R = R;
         this.K = K;
-       
+
         this.p = p;
         this.c = c;
         this.d = d;
@@ -139,29 +140,29 @@ public class TEMC_Model {
 
         // Constraint (2)
         for (int j = 0; j < J; j++) {
-
             for (int r = 0; r < R; r++) {
                 for (int k = 0; k < K; k++) {
                     IloLinearNumExpr expr_2 = model.linearNumExpr();
                     for (int i = 0; i < I; i++) {
                         expr_2.addTerm(s[k][i][j][r], 1);
-                        expr_2.addTerm(y[j][r], -d[k][r]);
 
                     }
+                    expr_2.addTerm(y[j][r], -d[k][r]);
                     model.addEq(expr_2, 0);
                 }
+
             }
         }
 
-         //Constraint (3)
+        //Constraint (3)
         for (int r = 0; r < R; r++) {
             IloLinearNumExpr expr_3 = model.linearNumExpr();
             for (int j = 0; j < J; j++) {
                 expr_3.addTerm(y[j][r], 1);
 
             }
-          
-           model.addEq(expr_3, 1);
+
+            model.addEq(expr_3, 1);
 
         }
 
@@ -170,10 +171,8 @@ public class TEMC_Model {
             IloLinearNumExpr expr_4max = model.linearNumExpr();
             for (int r = 0; r < R; r++) {
                 for (int k = 0; k < K; k++) {
-                    for (int i = 0; i < I; i++) {
-                        expr_4max.addTerm(d[k][r], y[j][r]);
 
-                    }
+                    expr_4max.addTerm(d[k][r], y[j][r]);
 
                 }
             }
@@ -186,10 +185,8 @@ public class TEMC_Model {
             IloLinearNumExpr expr_4min = model.linearNumExpr();
             for (int r = 0; r < R; r++) {
                 for (int k = 0; k < K; k++) {
-                    for (int i = 0; i < I; i++) {
-                        expr_4min.addTerm(d[k][r], y[j][r]);
 
-                    }
+                    expr_4min.addTerm(d[k][r], y[j][r]);
 
                 }
             }
@@ -197,16 +194,14 @@ public class TEMC_Model {
             model.addGe(expr_4min, 0);
         }
 
-       //  Constraint (5)  
+        //  Constraint (5)  
         IloLinearNumExpr expr_5 = model.linearNumExpr();
         for (int j = 0; j < J; j++) {
             expr_5.addTerm(z[j], 1);
         }
         model.addEq(expr_5, p);
-       
-      
 
-   }
+    }
 
     protected boolean Feasibility_Check() {
 
@@ -295,16 +290,17 @@ public class TEMC_Model {
                         }
                     }
                 }
-                double percentage_transport_cost = (transportation_total_cost / model.getObjValue()) * 100;
-                System.out.println("---> Total Transportation Cost is = " + transportation_total_cost + " - " + "(" + percentage_transport_cost + "%)");
-
+                      
+                System.out.println("---> Total Transportation Cost is = " + transportation_total_cost);
+                
                 double total_fixed_cost = 0;
                 for (int j = 0; j < J; j++) {
                     double H = model.getValue(z[j]);
                     double G = f[j];
+                    total_fixed_cost+= H*G;
                 }
-                double percentage_total_fixed_cost = (total_fixed_cost / model.getObjValue()) * 100;
-                System.out.println("---> Total Fixed Cost is = " + transportation_total_cost + " - " + "(" + percentage_total_fixed_cost + "%)");
+                
+                System.out.println("---> Total Fixed Cost is = " + total_fixed_cost );
 
                 double total_marginal_cost = 0;
 
@@ -320,14 +316,16 @@ public class TEMC_Model {
 
                 }
 
-                double percentage_total_marginal_cost = 100 - percentage_total_fixed_cost - percentage_transport_cost;
-                System.out.println("---> Total Marginal Cost is = " + transportation_total_cost + " - " + "(" + percentage_total_marginal_cost + "%)");
+                
+                System.out.println("---> Total Marginal Cost is = " + total_marginal_cost);
                 System.out.println();
                 System.out.println();
                 System.out.println("Value of variables z");
-                for (int j = 0; j < J; j++) {
 
-                    System.out.println("---> " + z[j].getName() + " = " + model.getValue(z[j]));
+                for (int j = 0; j < J; j++) {
+                    if (model.getValue(z[j]) != 0) {
+                        System.out.println("---> " + z[j].getName() + " = " + model.getValue(z[j]));
+                    }
                 }
                 System.out.println();
                 System.out.println();
@@ -336,8 +334,9 @@ public class TEMC_Model {
 
                 for (int j = 0; j < J; j++) {
                     for (int r = 0; r < R; r++) {
-
-                        System.out.println("---> " + y[j][r].getName() + " = " + model.getValue(y[j][r]));
+                        if (model.getValue(y[j][r]) != 0) {
+                            System.out.println("---> " + y[j][r].getName() + " = " + model.getValue(y[j][r]));
+                        }
                     }
                 }
 
@@ -352,8 +351,10 @@ public class TEMC_Model {
                         for (int j = 0; j < J; j++) {
 
                             for (int r = 0; r < R; r++) {
-                                System.out.println("---> " + s[k][i][j][r].getName() + " = " + model.getValue(s[k][i][j][r]));
+                                if (model.getValue(s[k][i][j][r]) != 0) {
+                                    System.out.println("---> " + s[k][i][j][r].getName() + " = " + model.getValue(s[k][i][j][r]));
 
+                                }
                             }
                         }
                     }
@@ -388,62 +389,5 @@ public class TEMC_Model {
     }
 
 }
-
-
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-    
-     
-    
-//         for (int k = 0; k < K; k++) {
-
-//            for (int i = 0; i < I; i++) {
-
-//                for (int j = 0; j < J; j++) {
-
-//                    for (int r = 0; r < R; r++) {
-
-//
-
-//
-//                    }
-//                }
-//            }
-//        }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-  
-    
-    
-    
     
     
