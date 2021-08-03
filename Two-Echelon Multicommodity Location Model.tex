@@ -1,0 +1,178 @@
+
+\documentclass[a4paper,12pt,titlepage]{article}
+\usepackage[utf8]{inputenc} 
+\usepackage{tikz,pgf}
+\usepackage{indentfirst}
+\usepackage{amsfonts}
+\usepackage[english]{babel}
+
+
+%Url e Bookmarks of output PDF 
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,      
+	urlcolor=cyan,
+	%	pdftitle={Document title},
+	bookmarks=true,
+	%pdfpagemode=FullScreen,
+}
+
+
+
+
+\usepackage{rotating}
+
+\usepackage{tabularx}
+\usepackage{multirow} 
+\usepackage{lscape}
+\usepackage{tikz}
+%to insert PDF files
+\usepackage[final]{pdfpages}
+%--Packages--
+
+\usepackage{eurosym}
+\usepackage{graphicx} \usepackage{verbatim}
+\usepackage{graphics}
+\usepackage{tikz,pgf}
+\usepackage{indentfirst}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsmath,amssymb,amsthm,textcomp}
+\usepackage{enumerate}
+\usepackage{multicol}
+\usepackage{tikz}
+\usepackage{geometry}
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{verbatim}
+\usepackage{amsmath,amssymb,mathrsfs}
+\usepackage{xcolor}
+\usepackage{graphicx,color,listings}
+\frenchspacing 
+\usepackage{geometry}
+\usepackage{rotating}
+\usepackage{caption}
+\usepackage{xcolor}
+\usepackage{listings}
+%Cool maths printing
+\usepackage{amsmath}
+%PseudoCode
+\usepackage{algorithm2e}
+
+
+\begin{document}
+\section*{Two-Echelon Multicommodity Location Model}
+\subsection*{Sets}
+- $I$ = set of production plants; (\textit{index $i$})\\
+- $J$ = set of potential Distribution Centers (DCs); (\textit{index $j$})\\
+- $R$ = set of demand nodes; (\textit{index $r$})\\
+- $K$ = set of homogeneous commodities; (\textit{index $k$})
+\subsection*{Parameters}
+- $p$ = maximum number of DCs that can be opened;\\
+- $c_{ijr}^k$ = unit transportation cost of commodity $k\in K$ from plant node $i\in I$ to demand node $r\in R$ across DC $j\in J$;\\
+- $d_{r}^k$ = demand of commodity $k\in K$ from demand node $r\in R$;\\
+- $p_{i}^k$ = maximum quantity of commodity $k\in K$ that can be manufactured by plant $i\in I$;\\
+- $q_{j}^-$ = minimum activity level of potential DC $j\in J$;\\
+- $q_{j}^+$ = maximum activity level of potential DC $j\in J$;\\
+- $f_{j}$ = fixed cost of potential DC $j\in J$;\\
+- $g_{j}$ = marginal cost of potential DC $j\in J$;
+\subsection*{Variables}
+
+$$z_j=
+\bigg \{
+\begin{array}{ll}
+1\qquad \text{if DC $j\in J$ is opened}\\
+0\qquad \text{otherwise}\\
+\end{array}
+$$
+
+$$y_{jr}=
+\bigg \{
+\begin{array}{ll}
+1\qquad \text{if demand node $r\in R$ is assigned to DC $j\in J$}\\
+0\qquad \text{otherwise}\\
+\end{array}
+$$
+
+- $s_{ijr}^k$ = amount of commodity $k\in K$ transported from plant node $i\in I$ to demand node $r\in R$ across DC $j\in J$;\\
+\\
+The following feasibility condition must hold:\\
+\begin{equation*}
+\sum_{i\in I}p_i^k \geq \sum_{r\in R} d_r^k  \quad      k\in K
+\end{equation*}
+
+%\newpage
+\subsection*{TEMC Mathematical Formulation} 
+\begin{equation*}
+\sum_{i\in I}\sum_{j\in J}\sum_{r\in R}\sum_{k\in K} c_{ijr}^k \cdot s_{ijr}^k +
+\sum_{j\in J} \left( f_j \cdot z_j + g_j \cdot \sum_{r\in R}\sum_{k\in K} d_r^k \cdot y_{jr}             \right) 
+\end{equation*}
+
+\begin{equation*}
+\sum_{j\in J}\sum_{r\in R} s_{ijr}^k \leq p_i^k \quad i\in I,\,k\in K
+\tag{1}
+\end{equation*}
+
+\begin{equation*}
+\sum_{i\in I} s_{ijr}^k = d_r^k \cdot y_{jr} \quad j\in J,\,r\in R,\,k\in K
+\tag{2}
+\end{equation*}
+
+\begin{equation*}
+\sum_{j\in J}y_{jr} = 1 \quad r\in R
+\tag{3}
+\end{equation*}
+
+\begin{equation*}
+q_j^-\cdot z_j \leq \sum_{r\in R}\sum_{k\in K}d_r^k \cdot y_{jr} \leq q_j^+\cdot z_j \quad j\in J
+\tag{4}
+\end{equation*}
+
+\begin{equation*}
+\sum_{j\in J} z_j = p
+\tag{5}
+\end{equation*}
+
+\begin{equation*}
+z_j \in \left\lbrace0,1\right\rbrace \quad j\in J
+\tag{6}
+\end{equation*}
+
+\begin{equation*}
+y_{jr} \in \left\lbrace0,1\right\rbrace \quad j\in J,\, r\in R
+\tag{7}
+\end{equation*}
+
+\begin{equation*}
+s_{ijr}^k\geq 0 \quad i\in I,\,j\in J,\, r\in R,\,k\in K
+\tag{8}
+\end{equation*}
+
+
+
+\subsection*{Demand Allocation Problem}
+If a set $\overline{z}$ $j\in J$ and $\overline{y}_{jr}$, $j\in J,\,r\in R$ of feasible values is available, you just have to solve the following LP problem in order to determine the optimal demand allocation:
+\begin{equation*}
+\sum_{i\in I}\sum_{j\in J}\sum_{r\in R}\sum_{k\in K} c_{ijr}^k \cdot s_{ijr}^k 
+\end{equation*}
+
+\begin{equation*}
+\sum_{j\in J}\sum_{r\in R} s_{ijr}^k  \leq p_i^k \quad i\in I,\,k\in K
+\end{equation*}
+
+\begin{equation*}
+\sum_{i\in I} s_{ijr}^k = d_r^k \cdot \overline{y}_{jr} \quad j\in J,\,r\in R,\,k\in K
+\end{equation*}
+
+\begin{equation*}
+s_{ijr}^k\geq 0 \quad i\in I,\,j\in J,\, r\in R,\,k\in K
+\end{equation*}
+
+
+
+
+
+\end{document}

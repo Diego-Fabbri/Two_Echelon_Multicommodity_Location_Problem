@@ -1,0 +1,47 @@
+Tried aggregator 2 times.
+MIP Presolve eliminated 10 rows and 11 columns.
+MIP Presolve modified 7 coefficients.
+Aggregator did 3 substitutions.
+All rows and columns eliminated.
+Presolve time = 0.16 sec. (0.03 ticks)
+
+Root node processing (before b&c):
+  Real time             =    0.19 sec. (0.03 ticks)
+Parallel b&c, 4 threads:
+  Real time             =    0.00 sec. (0.00 ticks)
+  Sync time (average)   =    0.00 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =    0.19 sec. (0.03 ticks)
+
+
+Feasibility condition is satisfied for commodity 1
+
+
+Total demand is less than total capacity for commodity 1
+Total demand for commodity 1 is : 1400.0
+Total capacity for commodity 1 is : 2700.0
+
+
+Solution status = Optimal
+
+
+Total Cost is = 968282.0877033926
+---> Total Transportation Cost is = 6882.087703392572
+---> Total Fixed Cost is = 960000.0
+---> Total Marginal Cost is = 1400.0
+
+
+Value of variables z
+---> z[1] = 1.0
+
+
+Value of variables y
+---> y[1][1] = 1.0
+---> y[1][2] = 1.0
+
+
+Value of variables s
+---> s[k=1][i=1][j=1][r=1] = 800.0000000000002
+---> s[k=1][i=2][j=1][r=1] = -2.2737367544323206E-13
+---> s[k=1][i=2][j=1][r=2] = 600.0
